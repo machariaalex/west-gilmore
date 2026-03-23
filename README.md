@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# West Gilmore St Church of Christ
 
-## Getting Started
+> *"Pointing Souls to Christ Through Truth and Love"*
 
-First, run the development server:
+Full-stack church website — Next.js 14 App Router · Tailwind CSS · Framer Motion · MongoDB · NextAuth
 
+---
+
+## Quick Start
+
+### 1. Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment variables
+```bash
+cp .env.example .env.local
+# Edit .env.local with your values
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run dev server
+```bash
+npm run dev
+# → http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Description |
+|---|---|
+| `MONGODB_URI` | MongoDB connection string |
+| `NEXTAUTH_SECRET` | Run: `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | e.g. `http://localhost:3000` |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary (image uploads) |
+| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+| `STRIPE_PUBLISHABLE_KEY` | Stripe donations |
+| `STRIPE_SECRET_KEY` | Stripe secret key |
+| `EMAIL_HOST` | SMTP host e.g. `smtp.gmail.com` |
+| `EMAIL_USER` / `EMAIL_PASS` | SMTP credentials |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pages
 
-## Deploy on Vercel
+| Route | Description |
+|---|---|
+| `/` | Home — animated hero, about, sermon, events, scripture |
+| `/about` | History, mission, leadership, beliefs |
+| `/ministry` | Ministry programs grid |
+| `/sermons` | Sermon library with filters & YouTube embed |
+| `/events` | Event list + calendar view |
+| `/gallery` | Photo grid with lightbox |
+| `/donations` | Online giving form |
+| `/resources` | Downloadable materials |
+| `/contact` | Contact form + map + service times |
+| `/login` | Member sign-in |
+| `/register` | New member registration |
+| `/portal` | Members dashboard |
+| `/portal/prayer` | Prayer wall |
+| `/portal/attendance` | Attendance tracker |
+| `/portal/news` | Announcements & bulletins |
+| `/portal/profile` | Edit profile & password |
+| `/admin` | Admin dashboard (admin role required) |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API Routes
+
+| Endpoint | Methods | Auth |
+|---|---|---|
+| `/api/auth/register` | POST | Public |
+| `/api/auth/[...nextauth]` | GET, POST | NextAuth |
+| `/api/sermons` | GET / POST | Public / Admin |
+| `/api/events` | GET / POST | Public / Admin |
+| `/api/prayer` | GET, POST | Members |
+| `/api/attendance` | GET, POST | Members |
+| `/api/users` | GET, PATCH | Admin |
+
+---
+
+## Make Yourself an Admin
+
+After registering, open your MongoDB database and run:
+```js
+db.users.updateOne({ email: "your@email.com" }, { $set: { role: "admin" } })
+```
+
+---
+
+## Deploy
+
+```bash
+npm run build   # must pass before deploying
+```
+
+Deploy on [Vercel](https://vercel.com) — connect your repo and add all env vars in the dashboard.
